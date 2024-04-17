@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 98vh;
+}
+#container {
+  display: flex;
+  height: 100%;
+}
+#map {
+  width: 70%; /* adjust as needed */
+  height: 100%;
+}
+#menu {
+  width: 30%; /* adjust as needed */
+  height: 100%;
+}
+/* Style the buttons that are used to open the tab content */
+.tablink {
+  background-color: #555;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+}
+
+/* Change background color of buttons on hover */
+.tablink:hover {
+  background-color: #777;
+}
+
+/* Create an active/current tablink class */
+.tablink.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  color: black;
+  display: none;
+  padding: 50px;
+  text-align: center;
+}
+#name {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-top: 6px;
+  font-size: 25px;
+  text-align: center; /* Added to center the text horizontally */
+}
+#Buttons {
+  display: flex;
+  justify-content: center;
+}
+#Buttons button {
+  font-size: 50px;
+  margin: 3px;
+  margin-top: 6px;
+}

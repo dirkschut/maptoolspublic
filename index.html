@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Map Tools</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@^1.0.0/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/pouchdb@^5.2.0/dist/pouchdb.js"></script>
+    <script src="https://unpkg.com/leaflet.tilelayer.pouchdbcached@latest/L.TileLayer.PouchDBCached.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="locations.js"></script>
+    <script src="countries.js"></script>
+    <script src="private.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="map"></div>
+      <div id="menu">
+        <button
+          class="tablink"
+          onclick="openPage('Guess', this, 'red')"
+          id="defaultOpen"
+        >
+          Guess
+        </button>
+        <button class="tablink" onclick="openPage('Guess List', this, 'green')">
+          Guess List
+        </button>
+        <button class="tablink" onclick="openPage('Recap', this, 'blue')">
+          Recap
+        </button>
+        <button class="tablink" onclick="openPage('Countries', this, 'orange')">
+          Countries
+        </button>
+
+        <div id="Guess" class="tabcontent">
+          <input type="text" id="name" placeholder="Enter placename" />
+          <div id="Buttons">
+            <button
+              onclick="clickCircleButton([{radius: 100, color: 'red', pin: true}])"
+            >
+              ❌
+            </button>
+            <button
+              onclick="clickCircleButton([{radius: 100, color: 'green', pin: true}, {radius: 50, color: 'red', pin: false}])"
+            >
+              🤏
+            </button>
+            <button
+              onclick="clickCircleButton([{radius: 50, color: 'green', pin: true}, {radius: 20, color: 'red', pin: false}])"
+            >
+              🤞
+            </button>
+            <button
+              onclick="clickCircleButton([{radius: 20, color: 'green', pin: true}])"
+            >
+              💥
+            </button>
+            <button
+              onclick="clickCircleButton([{radius: 10, color: 'green', pin: true}])"
+            >
+              🔍
+            </button>
+            <button
+              onclick="clickCircleButton([{radius: 5, color: 'green', pin: true}])"
+            >
+              📍
+            </button>
+          </div>
+          <label>
+            <input type="checkbox" id="centerCamera" checked />
+            Center camera on circle
+          </label>
+        </div>
+
+        <div id="Guess List" class="tabcontent">
+          <p>Not yet implemented</p>
+          <ul id="guesses"></ul>
+        </div>
+
+        <div id="Recap" class="tabcontent">
+          <textarea
+            id="recapinput"
+            rows="10"
+            cols="50"
+            placeholder="Enter /recap content here..."
+          ></textarea>
+          <div>
+            <button onclick="clickRecapCountry()">Recap Countries</button>
+            <button onclick="clickRecapCities()">Recap Cities</button>
+          </div>
+        </div>
+
+        <div id="Countries" class="tabcontent">
+          <h3>Countries</h3>
+          <button onclick="updateCountries()">Update countries</button>
+          <ul id="countries"></ul>
+        </div>
+
+        <div id="error-message" style="color: red"></div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>

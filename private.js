@@ -1,0 +1,2 @@
+const atlasKey = ``;
+const geonamesUsername = ``;
