@@ -1,5 +1,3 @@
-var guesses = [];
-
 function logError(error) {
   console.error(error);
   document.getElementById("error-message").innerHTML = `<div>${
@@ -8,65 +6,12 @@ function logError(error) {
 }
 
 function getCountryCapital(countryName) {
-  switch (countryName) {
-    case "Ireland":
-      countryName = "Republic of Ireland";
-      break;
-    case "India":
-      countryName = "Republic of India";
-      break;
-    case "United States":
-      countryName = "United States of America";
-      break;
-    case "Oman":
-      countryName = "Sultanate of Oman";
-      break;
-    case "China":
-      countryName = "cn";
-      break;
-    case "Dominica":
-      countryName = "Commonwealth of Dominica";
-      break;
-    case "Timor Leste":
-      countryName = "Timor-Leste";
-      break;
-    case "U.S. Virgin Islands":
-      countryName = "United States Virgin Islands";
-      break;
+  const country = countries.find((obj) => obj.Country === countryName);
+  if (country) {
+    return country.Capital;
+  } else {
+    throw new Error(`Country ${countryName} not found.`); // or handle the case when country is not found
   }
-  return fetch(`https://restcountries.com/v3.1/name/${countryName}`)
-    .then((response) => response.json())
-    .then((data) => {
-      switch (countryName) {
-        case "Macao":
-          data[0].capital = ["Macao"];
-          data[0].name.common = "Macao";
-          break;
-        case "Curacao":
-          data[0].name.common = "Curacao";
-          break;
-        case "cn":
-          countryName = "China";
-          break;
-        case "Antarctica":
-          data[0].capital = ["McMurdo"];
-          break;
-      }
-      if (data && data[0] && data[0].capital && data[0].capital[0]) {
-        if (
-          data[0].name.common != countryName &&
-          data[0].name.official != countryName
-        ) {
-          logError(new Error(`Country name ${countryName} is not correct`));
-        }
-        return `${data[0].capital[0]}, ${data[0].name.common}`;
-      } else {
-        throw new Error(`Country data for ${countryName} is not available`);
-      }
-    })
-    .catch((error) => {
-      logError(error);
-    });
 }
 
 function clickRecapCities() {
@@ -79,20 +24,20 @@ function clickRecapCities() {
     if (line.includes("Answer is not")) {
       const text = `${line.split("Answer is not")[1].trim()}, ${country}`;
       if (!checkedLocations.includes(text)) {
-        addCircle(text, 100000, "red", true);
+        addCircle(text, 100000, false, true);
         checkedLocations.push(text);
       } else {
         logError(new Error(`Location ${text} is already recapped`));
       }
     } else if (line.includes("Answer is under 100km away from")) {
       const text = `${line.split("Answer is under 100km away from")[1].trim()}`;
-      addCircle(text, 100000, "green", true);
-      addCircle(text, 50000, "red", true);
+      addCircle(text, 100000, true, true);
+      addCircle(text, 50000, false, true);
       checkedLocations.push(text);
     } else if (line.includes("Answer is under 50km away from")) {
       const text = `${line.split("Answer is under 50km away from")[1].trim()}`;
-      addCircle(text, 50000, "green", true);
-      addCircle(text, 20000, "red", true);
+      addCircle(text, 50000, true, true);
+      addCircle(text, 20000, false, true);
       checkedLocations.push(text);
     }
   });
@@ -103,26 +48,14 @@ function clickRecapCountry() {
   var recapLines = recapinput.split("\n");
   recapLines.forEach((line) => {
     if (line.includes("Answer is not in")) {
-      const text = line.split("Answer is not in")[1].trim();
-      getCountryCapital(text).then((capital) => {
-        if (!capital) {
-          logError(new Error(`Country data for ${text} is not available`));
-        } else {
-          addCircle(capital, 100000, "red", true);
-        }
-      });
+      const country = line.split("Answer is not in")[1].trim();
+      const capital = getCountryCapital(country);
+      if (!capital) {
+        logError(new Error(`Country data for ${country} is not available`));
+      }
+      addCircle(`${capital}, ${country}`, 100000, false, true);
     }
   });
-}
-
-async function updateCountries() {
-  document.getElementById("countries").innerHTML = "";
-  for (const country of countries) {
-    if (!guesses.some((guess) => guess.location.countryName === country)) {
-      const capital = await getCountryCapital(country);
-      document.getElementById("countries").innerHTML += `<li>${capital}</li>`;
-    }
-  }
 }
 
 function openPage(pageName, elmnt, color) {
@@ -156,7 +89,7 @@ const clickCircleButton = function (actions) {
     addCircle(
       document.getElementById("name").value,
       action.radius * 1000,
-      action.color,
+      action.hit,
       action.pin
     );
   });
@@ -206,7 +139,6 @@ const fetchData = async function (name) {
     });
 
     if (exactMatch) {
-      console.log(`Exact match found: ${exactMatch.name}`);
       return exactMatch;
     }
 
@@ -215,7 +147,6 @@ const fetchData = async function (name) {
       return locationString.toLowerCase() === name.toLowerCase();
     });
     if (capitalMatch) {
-      console.log(`Capital match found: ${capitalMatch.name}`);
       return capitalMatch;
     }
 
@@ -279,9 +210,10 @@ const getCoords = async function (name) {
 // color: string, color of the circle
 // Returns: Leaflet circle object
 const createCircle = function (location, radius, color) {
+  const circleColor = color ? "green" : "red";
   return L.circle([location.latitude, location.longitude], {
-    color: color,
-    fillColor: color,
+    color: circleColor,
+    fillColor: circleColor,
     fillOpacity: 0.05,
     radius: radius,
   }).addTo(map);
@@ -302,35 +234,30 @@ const addPin = function (location) {
 // color: string, color of the circle
 // pin: boolean, whether to add a pin to the map
 // Returns: nothing
-const addCircle = async function (name, radius, color, pin) {
+const addCircle = async function (name, radius, hit, pin) {
   try {
     // Fetch location data
     const location = await getCoords(name);
-    console.log(location);
 
     // If no location is found, throw an error
     if (!location) {
       throw new Error(`Location ${name} not found`);
     }
 
+    // If pin is true, add a pin to the map
+    const marker = addPin(location);
+
     // Create a circle on the map
-    const circle = createCircle(location, radius, color);
-    var hit = false;
-    if (color === "green") {
-      hit = true;
-    }
+    const circle = createCircle(location, radius, hit);
     var guessdata = {
       location: location,
       hit: hit,
       radius: radius,
       name: name,
+      circle: circle,
+      marker: marker,
     };
-    guesses.push(guessdata);
-
-    // If pin is true, add a pin to the map
-    if (pin) {
-      const marker = addPin(location);
-    }
+    addGuessToList(guessdata);
 
     // If the centerCamera checkbox is checked, center the map on the location
     if (document.getElementById("centerCamera").checked) {
@@ -356,54 +283,12 @@ const getPointIsWithinCircle = function (
   return distance < circleRadius;
 };
 
-var OSMtiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution:
-    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  useCache: true,
-  crossOrigin: true,
-  cacheMaxAge: 108000000,
-});
+function generateGUID() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
 
-// Add a tile layer to the map
-var atlas = L.tileLayer(
-  `https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=${atlasKey}`,
-  {
-    maxZoom: 19,
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    useCache: true,
-    crossOrigin: true,
-    cacheMaxAge: 108000000,
-  }
-);
-
-var locationmarkers = L.markerClusterGroup();
-locationsJSON.forEach((location) => {
-  if (location.population >= 5000) {
-    var marker = L.marker(L.latLng(location.latitude, location.longitude), {
-      title: location.name,
-    });
-    marker.bindPopup(`Name: ${location.name}<br />Region: ${location.region}`);
-    locationmarkers.addLayer(marker);
-  }
-});
-
-// Initialize the map
-const map = L.map("map", {
-  center: [0, 0],
-  zoom: 2,
-  layers: [OSMtiles],
-});
-
-// Add a layer control to the map
-var baseMaps = {
-  OpenStreetMap: OSMtiles,
-  Atlas: atlas,
-};
-
-var overlayMaps = {
-  Locations: locationmarkers,
-};
-
-L.control.layers(baseMaps, overlayMaps).addTo(map);
+initMap();

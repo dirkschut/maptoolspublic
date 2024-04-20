@@ -25,6 +25,9 @@
     <script src="locations.js"></script>
     <script src="countries.js"></script>
     <script src="private.js"></script>
+    <script src="maplayers.js"></script>
+    <script src="guesslist.js"></script>
+    <script src="countrieslist.js"></script>
   </head>
   <body>
     <div id="container">
@@ -35,48 +38,49 @@
           onclick="openPage('Guess', this, 'red')"
           id="defaultOpen"
         >
-          Guess
+          Input
         </button>
         <button class="tablink" onclick="openPage('Guess List', this, 'green')">
-          Guess List
-        </button>
-        <button class="tablink" onclick="openPage('Recap', this, 'blue')">
-          Recap
+          Guesses
         </button>
         <button class="tablink" onclick="openPage('Countries', this, 'orange')">
           Countries
         </button>
+        <button class="tablink" onclick="openPage('Info', this, 'blue')">
+          Info
+        </button>
 
         <div id="Guess" class="tabcontent">
+          <h1>Guess</h1>
           <input type="text" id="name" placeholder="Enter placename" />
           <div id="Buttons">
             <button
-              onclick="clickCircleButton([{radius: 100, color: 'red', pin: true}])"
+              onclick="clickCircleButton([{radius: 100, hit: false, pin: true}])"
             >
               ❌
             </button>
             <button
-              onclick="clickCircleButton([{radius: 100, color: 'green', pin: true}, {radius: 50, color: 'red', pin: false}])"
+              onclick="clickCircleButton([{radius: 100, hit: true, pin: true}, {radius: 50, hit: false, pin: false}])"
             >
               🤏
             </button>
             <button
-              onclick="clickCircleButton([{radius: 50, color: 'green', pin: true}, {radius: 20, color: 'red', pin: false}])"
+              onclick="clickCircleButton([{radius: 50, hit: true, pin: true}, {radius: 20, hit: false, pin: false}])"
             >
               🤞
             </button>
             <button
-              onclick="clickCircleButton([{radius: 20, color: 'green', pin: true}])"
+              onclick="clickCircleButton([{radius: 20, hit: true, pin: true}])"
             >
               💥
             </button>
             <button
-              onclick="clickCircleButton([{radius: 10, color: 'green', pin: true}])"
+              onclick="clickCircleButton([{radius: 10, hit: true, pin: true}])"
             >
               🔍
             </button>
             <button
-              onclick="clickCircleButton([{radius: 5, color: 'green', pin: true}])"
+              onclick="clickCircleButton([{radius: 5, hit: true, pin: true}])"
             >
               📍
             </button>
@@ -85,14 +89,8 @@
             <input type="checkbox" id="centerCamera" checked />
             Center camera on circle
           </label>
-        </div>
-
-        <div id="Guess List" class="tabcontent">
-          <p>Not yet implemented</p>
-          <ul id="guesses"></ul>
-        </div>
-
-        <div id="Recap" class="tabcontent">
+          <hr />
+          <h1>Recap</h1>
           <textarea
             id="recapinput"
             rows="10"
@@ -105,10 +103,63 @@
           </div>
         </div>
 
+        <div id="Guess List" class="tabcontent">
+          <button onclick="deleteAllGuesses()">Delete All</button>
+          <ul id="guessList"></ul>
+        </div>
+
+        <div id="Info" class="tabcontent">
+          Maptools is a tool made by Dirk Schut and is made freely available to
+          anyone. You can check out the github repo at
+          <a href="https://github.com/dirkschut/maptoolspublic"
+            >https://github.com/dirkschut/maptoolspublic</a
+          >.
+          <h2>Changelog:</h2>
+          <h3>Release 2 - 20 April 2024</h3>
+          <ul>
+            <li>
+              Added the guess list, where you can review and delete previous
+              guesses.
+            </li>
+            <li>
+              Added the countries list, where you can see all countries that
+              have not yet been guessed and can filter by continent.
+            </li>
+          </ul>
+
+          <h3>Release 1 - 17 April 2024</h3>
+          <ul>
+            <li>
+              First public release. Very early stages, but it has the guess
+              system and geonames data baked in the locations layer.
+            </li>
+          </ul>
+        </div>
+
         <div id="Countries" class="tabcontent">
           <h3>Countries</h3>
-          <button onclick="updateCountries()">Update countries</button>
-          <ul id="countries"></ul>
+          <!--<div id="countriesHempispheres">
+            <input type="checkbox" id="north" checked />
+            <label for="north">Northern Hemisphere</label>
+            <input type="checkbox" id="south" checked />
+            <label for="south">Southern Hemisphere</label>
+          </div>-->
+          <div id="countriesContinents">
+            <input type="checkbox" id="continentAF" checked />
+            <label for="continentAF">AF</label>
+            <input type="checkbox" id="continentAS" checked />
+            <label for="continentAS">AS</label>
+            <input type="checkbox" id="continentEU" checked />
+            <label for="continentEU">EU</label>
+            <input type="checkbox" id="continentNA" checked />
+            <label for="continentNA">NA</label>
+            <input type="checkbox" id="continentOC" checked />
+            <label for="continentOC">OC</label>
+            <input type="checkbox" id="continentSA" checked />
+            <label for="continentSA">SA</label>
+          </div>
+          <button onclick="updateCountriesList()">Update countries</button>
+          <ul id="countriesList"></ul>
         </div>
 
         <div id="error-message" style="color: red"></div>
