@@ -1,7 +1,13 @@
+@font-face {
+  font-family: Geist;
+  src: url(GeistVF.woff);
+}
+
 body {
   margin: 0;
   padding: 0;
   height: 98vh;
+  font-family: Geist;
 }
 #container {
   display: flex;
@@ -45,6 +51,25 @@ body {
   padding: 5px;
   text-align: center;
 }
+
+h1 {
+  margin: 0;
+}
+
+.changelog {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+.changelog ul {
+  padding: 0;
+  margin: 0;
+}
+.changelog li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 #name {
   width: 100%;
   box-sizing: border-box;

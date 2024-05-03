@@ -1,7 +1,11 @@
+var AttributionOSM =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+var AttributionThunderforest =
+  '&copy; <a href="https://www.thunderforest.com">Thunderforest</a>';
+
 var OSMtiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
-  attribution:
-    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  attribution: `${AttributionOSM}`,
   useCache: true,
   crossOrigin: true,
   cacheMaxAge: 108000000,
@@ -12,13 +16,16 @@ var atlas = L.tileLayer(
   `https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=${atlasKey}`,
   {
     maxZoom: 19,
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    attribution: `${AttributionOSM} | ${AttributionThunderforest}`,
     useCache: true,
     crossOrigin: true,
     cacheMaxAge: 108000000,
   }
 );
+
+var bingTiles = new L.BingLayer(bingKey, {
+  imagerySet: "CanvasLight",
+});
 
 var locationmarkers = L.markerClusterGroup();
 locationsJSON.forEach((location) => {
@@ -45,6 +52,7 @@ var initMap = function () {
   var baseMaps = {
     OpenStreetMap: OSMtiles,
     Atlas: atlas,
+    Bing: bingTiles,
   };
 
   var overlayMaps = {

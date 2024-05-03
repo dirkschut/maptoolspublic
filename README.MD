@@ -26,9 +26,8 @@ SET elevation = IF(@ELEVATIONTEMP = '', NULL, @ELEVATIONTEMP)
 query to generate locations.js:
 
 SELECT
-SELECT
 locations.name,
-locations.asciiname,
+locations.population,
 countries.Country AS country,
 admin1.name AS region,
 locations.latitude,
@@ -42,7 +41,9 @@ locations.country_code,
 locations.admin1_code
 ) = admin1.code
 WHERE
-locations.population >= 1
+1 = 1
+AND locations.population >= 1
+AND locations.feature_class = 'P'
 ORDER BY
 locations.population DESC
 

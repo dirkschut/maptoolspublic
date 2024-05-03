@@ -22,37 +22,62 @@
     <script src="https://unpkg.com/pouchdb@^5.2.0/dist/pouchdb.js"></script>
     <script src="https://unpkg.com/leaflet.tilelayer.pouchdbcached@latest/L.TileLayer.PouchDBCached.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="Bing.js"></script>
     <script src="locations.js"></script>
     <script src="countries.js"></script>
     <script src="private.js"></script>
     <script src="maplayers.js"></script>
     <script src="guesslist.js"></script>
     <script src="countrieslist.js"></script>
+    <script src="randomcity.js"></script>
   </head>
   <body>
     <div id="container">
       <div id="map"></div>
       <div id="menu">
-        <button
-          class="tablink"
-          onclick="openPage('Guess', this, 'red')"
-          id="defaultOpen"
-        >
-          Input
-        </button>
-        <button class="tablink" onclick="openPage('Guess List', this, 'green')">
-          Guesses
-        </button>
-        <button class="tablink" onclick="openPage('Countries', this, 'orange')">
-          Countries
-        </button>
-        <button class="tablink" onclick="openPage('Info', this, 'blue')">
-          Info
-        </button>
+        <div id="row1" class="menurow">
+          <button
+            class="tablink"
+            onclick="openPage('Guess', this, 'red')"
+            id="defaultOpen"
+          >
+            Input
+          </button>
+          <button
+            class="tablink"
+            onclick="openPage('Guess List', this, 'green')"
+          >
+            Guesses
+          </button>
+          <button
+            class="tablink"
+            onclick="openPage('Countries', this, 'orange')"
+          >
+            Countries
+          </button>
+          <button class="tablink" onclick="openPage('Info', this, 'blue')">
+            Info
+          </button>
+        </div>
+        <div id="row2" class="menurow">
+          <button
+            class="tablink"
+            onclick="openPage('Random City', this, 'blue')"
+          >
+            Random City
+          </button>
+          <button class="tablink" onclick="">TODO TBD</button>
+          <button class="tablink" onclick="">TODO TBD</button>
+          <button class="tablink" onclick="">TODO TBD</button>
+        </div>
 
         <div id="Guess" class="tabcontent">
           <h1>Guess</h1>
-          <input type="text" id="name" placeholder="Enter placename" />
+          <input
+            type="text"
+            id="name"
+            placeholder="Enter city, region, country"
+          />
           <div id="Buttons">
             <button
               onclick="clickCircleButton([{radius: 100, hit: false, pin: true}])"
@@ -114,26 +139,46 @@
           <a href="https://github.com/dirkschut/maptoolspublic"
             >https://github.com/dirkschut/maptoolspublic</a
           >.
+          <hr />
           <h2>Changelog:</h2>
-          <h3>Release 2 - 20 April 2024</h3>
-          <ul>
-            <li>
-              Added the guess list, where you can review and delete previous
-              guesses.
-            </li>
-            <li>
-              Added the countries list, where you can see all countries that
-              have not yet been guessed and can filter by continent.
-            </li>
-          </ul>
+          <div class="changelog">
+            <h3>Release 3.1 - 5 May 2024</h3>
+            <ul>
+              <li>Updated location data.</li>
+            </ul>
+            <h3>Release 3 - 21 April 2024</h3>
+            <ul>
+              <li>Changed font to Geist.</li>
+              <li>
+                Added the random city feature for use with the /set-city
+                command.
+              </li>
+            </ul>
+          </div>
 
-          <h3>Release 1 - 17 April 2024</h3>
-          <ul>
-            <li>
-              First public release. Very early stages, but it has the guess
-              system and geonames data baked in the locations layer.
-            </li>
-          </ul>
+          <div class="changelog">
+            <h3>Release 2 - 20 April 2024</h3>
+            <ul>
+              <li>
+                Added the guess list, where you can review and delete previous
+                guesses.
+              </li>
+              <li>
+                Added the countries list, where you can see all countries that
+                have not yet been guessed and can filter by continent.
+              </li>
+            </ul>
+          </div>
+
+          <div class="changelog">
+            <h3>Release 1 - 17 April 2024</h3>
+            <ul>
+              <li>
+                First public release. Very early stages, but it has the guess
+                system and geonames data baked in the locations layer.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div id="Countries" class="tabcontent">
@@ -162,6 +207,15 @@
           <ul id="countriesList"></ul>
         </div>
 
+        <div id="Random City" class="tabcontent">
+          <h1>Random City</h1>
+          <button onclick="clickRandomCity()">Random City</button>
+          <div id="randomCity"></div>
+        </div>
+
+        <hr />
+        <h2>Error Messages</h2>
+        <p>Ignore if empty</p>
         <div id="error-message" style="color: red"></div>
       </div>
     </div>
