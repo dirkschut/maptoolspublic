@@ -14,6 +14,12 @@ var clickRandomCity = function () {
     Random city: ${randomCity.name}<br />
     Region: ${randomCity.region}<br />
     Country: ${randomCity.country}<br />
-    Population: ${randomCity.population}
+    Population: ${randomCity.population}<br />
+    <button onclick="openGoogleMaps(${randomCity.latitude}, ${randomCity.longitude})">Open in Google Maps</button>
 `;
+};
+
+var openGoogleMaps = function (latitude, longitude) {
+  var url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+  window.open(url);
 };

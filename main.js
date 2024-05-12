@@ -1,8 +1,14 @@
 function logError(error) {
   console.error(error);
-  document.getElementById("error-message").innerHTML = `<div>${
-    error.message
-  }</div> ${document.getElementById("error-message").innerHTML}`;
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const errorMessage = `<div>${formattedDate} - ${error.message}</div> ${
+    document.getElementById("error-message").innerHTML
+  }`;
+  document.getElementById("error-message").innerHTML = errorMessage;
 }
 
 function getCountryCapital(countryName) {
@@ -16,6 +22,7 @@ function getCountryCapital(countryName) {
 
 function clickRecapCities() {
   var recapinput = document.getElementById("recapinput").value;
+  document.getElementById("recapinput").value = "";
   var recapLines = recapinput.split("\n");
   var country = recapLines[0].split("Country: ")[1];
   var checkedLocations = [];
@@ -45,6 +52,7 @@ function clickRecapCities() {
 
 function clickRecapCountry() {
   var recapinput = document.getElementById("recapinput").value;
+  document.getElementById("recapinput").value = "";
   var recapLines = recapinput.split("\n");
   recapLines.forEach((line) => {
     if (line.includes("Answer is not in")) {
@@ -97,6 +105,7 @@ const clickCircleButton = function (actions) {
 
 function levenshteinDistance(a, b) {
   const matrix = [];
+  const limit = 5;
 
   // increment along the first column of each row
   let i;
@@ -124,84 +133,83 @@ function levenshteinDistance(a, b) {
           )
         ); // deletion
       }
+      if (matrix[i][j] > limit) {
+        return -1;
+      }
     }
   }
 
   return matrix[b.length][a.length];
 }
 
-// Function to fetch data from geonames API
-const fetchData = async function (name) {
-  try {
-    const exactMatch = locationsJSON.find((location) => {
-      const locationString = `${location.name}, ${location.region}, ${location.country}`;
-      return locationString.toLowerCase() === name.toLowerCase();
-    });
+// Function to find exact match
+const findExactMatch = (name, locationsJSON) => {
+  return locationsJSON.find((location) => {
+    const locationString = `${location.name}, ${location.region}, ${location.country}`;
+    return locationString.toLowerCase() === name.toLowerCase();
+  });
+};
 
+// Function to find capital match
+const findCapitalMatch = (name, locationsJSON) => {
+  return locationsJSON.find((location) => {
+    const locationString = `${location.name}, ${location.country}`;
+    return locationString.toLowerCase() === name.toLowerCase();
+  });
+};
+
+// Function to find city match
+const findCityMatch = (name, locationsJSON) => {
+  return locationsJSON.find((location) => {
+    const locationString = `${location.name}`;
+    return locationString.toLowerCase() === name.toLowerCase();
+  });
+};
+
+// Function to find closest match
+const findClosestMatch = (name, locationsJSON) => {
+  return locationsJSON.reduce(
+    (closestMatch, location) => {
+      const locationString = `${location.name}, ${location.region}, ${location.country}`;
+      const distance = levenshteinDistance(
+        locationString.toLowerCase(),
+        name.toLowerCase()
+      );
+      if (distance < closestMatch.distance && distance !== -1) {
+        return { location, distance };
+      }
+      return closestMatch;
+    },
+    { location: null, distance: Infinity }
+  ).location;
+};
+
+// Function to fetch data from geonames API
+const findLocation = async function (name) {
+  try {
+    let exactMatch = findExactMatch(name, locationsJSON);
     if (exactMatch) {
       return exactMatch;
     }
 
-    const capitalMatch = locationsJSON.find((location) => {
-      const locationString = `${location.name}, ${location.country}`;
-      return locationString.toLowerCase() === name.toLowerCase();
-    });
+    let capitalMatch = findCapitalMatch(name, locationsJSON);
     if (capitalMatch) {
       return capitalMatch;
     }
 
-    console.log(`No exact match found. Searching for: ${name}`);
-
-    const response = locationsJSON.reduce(
-      (closestMatch, location) => {
-        const locationString = `${location.name}, ${location.region}, ${location.country}`;
-        const distance = levenshteinDistance(
-          locationString.toLowerCase(),
-          name.toLowerCase()
-        );
-        if (distance < closestMatch.distance) {
-          return { location, distance };
-        }
-        return closestMatch;
-      },
-      { location: null, distance: Infinity }
-    ).location;
-
-    if (!response) {
-      throw new Error(`No match found in locationsJSON for ${name}`);
+    let cityMatch = findCityMatch(name, locationsJSON);
+    if (cityMatch) {
+      return cityMatch;
     }
 
-    console.log(response);
-    return response;
+    console.log(`No exact match found. Searching for: ${name}`);
+
+    let response = findClosestMatch(name, locationsJSON);
+
+    if (response != null) return response;
   } catch (error) {
     logError(error);
   }
-};
-
-// Function to find location from geonames data
-const findLocation = function (geonamesData, searchterm) {
-  // Find the first populated place or city in the geonames data
-  // geonamesData: array of objects from geonames API
-  // Returns: first object that matches the condition or undefined
-  const location = geonamesData.find((item) => item.fcl === "P");
-
-  // If no location is found, throw an error
-  if (!location) {
-    throw new Error(
-      `No location found in geonames data with serach term ${searchterm}`
-    );
-  }
-
-  // Return the found location
-  return location;
-};
-
-// Function to get coordinates from geonames API
-// name: string, name of the location to fetch data for
-// Returns: location object or throws an error
-const getCoords = async function (name) {
-  const geonamesData = await fetchData(name.trim());
-  return geonamesData;
 };
 
 // Function to create a circle on the map
@@ -210,22 +218,13 @@ const getCoords = async function (name) {
 // color: string, color of the circle
 // Returns: Leaflet circle object
 const createCircle = function (location, radius, color) {
-  const circleColor = color ? "green" : "red";
+  const circleColor = color ? settingColorHit : settingColorMiss;
   return L.circle([location.latitude, location.longitude], {
     color: circleColor,
     fillColor: circleColor,
     fillOpacity: 0.05,
     radius: radius,
-  }).addTo(map);
-};
-
-// Function to add a pin to the map
-// location: object, contains lat and lng properties
-// Returns: Leaflet marker object
-const addPin = function (location) {
-  const marker = L.marker([location.latitude, location.longitude]).addTo(map);
-  marker.bindPopup(location.name).openPopup();
-  return marker;
+  }).addTo(guessesLayerGroup);
 };
 
 // Function to add a circle to the map
@@ -237,7 +236,7 @@ const addPin = function (location) {
 const addCircle = async function (name, radius, hit, pin) {
   try {
     // Fetch location data
-    const location = await getCoords(name);
+    const location = await findLocation(name.trim());
 
     // If no location is found, throw an error
     if (!location) {

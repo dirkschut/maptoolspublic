@@ -16,6 +16,10 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@^1.0.0/dist/leaflet-src.js"></script>
@@ -23,13 +27,16 @@
     <script src="https://unpkg.com/leaflet.tilelayer.pouchdbcached@latest/L.TileLayer.PouchDBCached.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="Bing.js"></script>
-    <script src="locations.js"></script>
-    <script src="countries.js"></script>
+    <script src="data/locations.js"></script>
+    <script src="data/countries.js"></script>
     <script src="private.js"></script>
     <script src="maplayers.js"></script>
+    <script src="mapmarkers.js"></script>
     <script src="guesslist.js"></script>
     <script src="countrieslist.js"></script>
     <script src="randomcity.js"></script>
+    <script src="settings.js"></script>
+    <script src="guessButtons.js"></script>
   </head>
   <body>
     <div id="container">
@@ -41,34 +48,32 @@
             onclick="openPage('Guess', this, 'red')"
             id="defaultOpen"
           >
-            Input
+            <i class="fas fa-search"></i>
           </button>
           <button
             class="tablink"
             onclick="openPage('Guess List', this, 'green')"
           >
-            Guesses
+            <i class="fas fa-list"></i>
           </button>
           <button
             class="tablink"
             onclick="openPage('Countries', this, 'orange')"
           >
-            Countries
+            <i class="fas fa-map"></i>
           </button>
-          <button class="tablink" onclick="openPage('Info', this, 'blue')">
-            Info
-          </button>
-        </div>
-        <div id="row2" class="menurow">
           <button
             class="tablink"
             onclick="openPage('Random City', this, 'blue')"
           >
-            Random City
+            <i class="fas fa-dice"></i>
           </button>
-          <button class="tablink" onclick="">TODO TBD</button>
-          <button class="tablink" onclick="">TODO TBD</button>
-          <button class="tablink" onclick="">TODO TBD</button>
+          <button class="tablink" onclick="openPage('Info', this, 'blue')">
+            <i class="fas fa-info-circle"></i>
+          </button>
+          <button class="tablink" onclick="openPage('Settings', this, 'blue')">
+            <i class="fas fa-cog"></i>
+          </button>
         </div>
 
         <div id="Guess" class="tabcontent">
@@ -79,40 +84,24 @@
             placeholder="Enter city, region, country"
           />
           <div id="Buttons">
-            <button
-              onclick="clickCircleButton([{radius: 100, hit: false, pin: true}])"
-            >
-              ❌
-            </button>
-            <button
-              onclick="clickCircleButton([{radius: 100, hit: true, pin: true}, {radius: 50, hit: false, pin: false}])"
-            >
-              🤏
-            </button>
-            <button
-              onclick="clickCircleButton([{radius: 50, hit: true, pin: true}, {radius: 20, hit: false, pin: false}])"
-            >
-              🤞
-            </button>
-            <button
-              onclick="clickCircleButton([{radius: 20, hit: true, pin: true}])"
-            >
-              💥
-            </button>
-            <button
-              onclick="clickCircleButton([{radius: 10, hit: true, pin: true}])"
-            >
-              🔍
-            </button>
-            <button
-              onclick="clickCircleButton([{radius: 5, hit: true, pin: true}])"
-            >
-              📍
-            </button>
+            <button onclick="clickGuessButtonMiss()">❌</button>
+            <button onclick="clickGuessButton100()">🤏</button>
+            <button onclick="clickGuessButton50()">🤞</button>
+            <button onclick="clickGuessButton20()">💥</button>
+            <button onclick="clickGuessButton10()">🔍</button>
+            <button onclick="clickGuessButton5()">📍</button>
           </div>
           <label>
             <input type="checkbox" id="centerCamera" checked />
             Center camera on circle
+          </label>
+          <label>
+            <input type="checkbox" id="enable20RedCircles" />
+            Enable red circles with 💥
+          </label>
+          <label>
+            <input type="checkbox" id="enable10RedCircles" />
+            Enable red circles with 🔍
           </label>
           <hr />
           <h1>Recap</h1>
@@ -129,23 +118,55 @@
         </div>
 
         <div id="Guess List" class="tabcontent">
+          <div class="tooltip">
+            <i class="fas fa-info-circle"></i>
+            <span class="tooltiptext"
+              >The Guess List shows all guesses made so far. You can remove them
+              individually by pressing the x button next to them, or remove them
+              all by pressing the Delete All button. You can also hide your
+              guesses by disabling the Guesses layer.</span
+            >
+          </div>
+          <h1>Guess List</h1>
           <button onclick="deleteAllGuesses()">Delete All</button>
           <ul id="guessList"></ul>
         </div>
 
         <div id="Info" class="tabcontent">
-          Maptools is a tool made by Dirk Schut and is made freely available to
-          anyone. You can check out the github repo at
+          Maptools is a tool made by
+          <a href="https://dirkschut.nl">Dirk Schut</a> and is made freely
+          available to anyone. You can check out the github repo at
           <a href="https://github.com/dirkschut/maptoolspublic"
             >https://github.com/dirkschut/maptoolspublic</a
           >.
           <hr />
           <h2>Changelog:</h2>
           <div class="changelog">
+            <h3>Release 4 - 12 May 2024</h3>
+            <ul>
+              <li>Replaced menu button text with icons.</li>
+              <li>
+                Added the following data to countries: population, number of
+                locations with 5k+ pop.
+              </li>
+              <li>Added ability to disable the circles on the map.</li>
+              <li>
+                Added a button to copy the location names to the clipboard.
+              </li>
+              <li>Added a settings panel.</li>
+              <li>Added settings to change the colors of the circles.</li>
+              <li>Added special icon for guess markers on the map.</li>
+              <li>Toggles for miss circles with 20 and 10 km guesses.</li>
+              <li>Updated location data.</li>
+            </ul>
+          </div>
+          <div class="changelog">
             <h3>Release 3.1 - 3 May 2024</h3>
             <ul>
               <li>Updated location data.</li>
             </ul>
+          </div>
+          <div class="changelog">
             <h3>Release 3 - 21 April 2024</h3>
             <ul>
               <li>Changed font to Geist.</li>
@@ -204,13 +225,34 @@
             <label for="continentSA">SA</label>
           </div>
           <button onclick="updateCountriesList()">Update countries</button>
-          <ul id="countriesList"></ul>
+          <table id="countriesList"></table>
         </div>
 
         <div id="Random City" class="tabcontent">
           <h1>Random City</h1>
           <button onclick="clickRandomCity()">Random City</button>
           <div id="randomCity"></div>
+        </div>
+
+        <div id="Settings" class="tabcontent">
+          <h1>Settings</h1>
+          <div id="SettingsContainer">
+            <div>
+              <button onclick="clickSaveSettings()">Save Settings</button>
+            </div>
+            <div>
+              <label>
+                <input type="color" id="settingColorHit" />
+                Hit Color
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="color" id="settingColorMiss" />
+                Miss Color
+              </label>
+            </div>
+          </div>
         </div>
 
         <hr />

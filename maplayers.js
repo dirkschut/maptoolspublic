@@ -3,6 +3,7 @@ var AttributionOSM =
 var AttributionThunderforest =
   '&copy; <a href="https://www.thunderforest.com">Thunderforest</a>';
 
+// Add an OpenStreetMap tile layer to the map
 var OSMtiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution: `${AttributionOSM}`,
@@ -23,8 +24,12 @@ var atlas = L.tileLayer(
   }
 );
 
+// Add a Bing tile layer to the map
 var bingTiles = new L.BingLayer(bingKey, {
   imagerySet: "CanvasLight",
+  useCache: true,
+  crossOrigin: true,
+  cacheMaxAge: 108000000,
 });
 
 var locationmarkers = L.markerClusterGroup();
@@ -34,9 +39,16 @@ locationsJSON.forEach((location) => {
       title: location.name,
     });
     marker.bindPopup(`Name: ${location.name}<br />Region: ${location.region}`);
+    marker
+      .getPopup()
+      .setContent(
+        `<button onClick='navigator.clipboard.writeText("${location.name}");'>Copy name</button><br />Name: ${location.name}<br />Region: ${location.region}<br />`
+      );
     locationmarkers.addLayer(marker);
   }
 });
+
+var guessesLayerGroup = L.layerGroup();
 
 // Initialize the map
 var map;
@@ -45,7 +57,7 @@ var initMap = function () {
   map = L.map("map", {
     center: [0, 0],
     zoom: 2,
-    layers: [OSMtiles],
+    layers: [OSMtiles, guessesLayerGroup],
   });
 
   // Add a layer control to the map
@@ -57,6 +69,7 @@ var initMap = function () {
 
   var overlayMaps = {
     Locations: locationmarkers,
+    Guesses: guessesLayerGroup,
   };
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
