@@ -142,6 +142,20 @@
           <hr />
           <h2>Changelog:</h2>
           <div class="changelog">
+            <h3>Release 5 - 17 May 2024</h3>
+            <ul>
+              <li>No longer pan to circle if doing recap.</li>
+              <li>Fixed recap circles for 20, 10, and 5 km radius circles.</li>
+              <li>Copy to clipboard button for random city.</li>
+              <li>Added the equator as a line that can be turned off.</li>
+              <li>
+                Added colors to the guess list based on if it's a hit or a miss.
+              </li>
+              <li>Updated location data.</li>
+              <li>Added filters for continents for random city generation.</li>
+            </ul>
+          </div>
+          <div class="changelog">
             <h3>Release 4 - 12 May 2024</h3>
             <ul>
               <li>Replaced menu button text with icons.</li>
@@ -230,7 +244,25 @@
 
         <div id="Random City" class="tabcontent">
           <h1>Random City</h1>
-          <button onclick="clickRandomCity()">Random City</button>
+          <div id="randomCityFilters">
+            <h2>Filters</h2>
+            <div id="continents">
+              <b>Continent:</b>
+              <input type="checkbox" id="randomAF" checked />
+              <label for="randomAF">AF</label>
+              <input type="checkbox" id="randomAS" checked />
+              <label for="randomAS">AS</label>
+              <input type="checkbox" id="randomEU" checked />
+              <label for="randomEU">EU</label>
+              <input type="checkbox" id="randomNA" checked />
+              <label for="randomNA">NA</label>
+              <input type="checkbox" id="randomOC" checked />
+              <label for="randomOC">OC</label>
+              <input type="checkbox" id="randomSA" checked />
+              <label for="randomSA">SA</label>
+            </div>
+          </div>
+          <button onclick="clickRandomCity()">Generate Random City</button>
           <div id="randomCity"></div>
         </div>
 

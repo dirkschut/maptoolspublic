@@ -50,6 +50,16 @@ locationsJSON.forEach((location) => {
 
 var guessesLayerGroup = L.layerGroup();
 
+var equatorLayerGroup = L.layerGroup();
+var equator = L.polyline(
+  [
+    [0, -180],
+    [0, 180],
+  ],
+  { color: "red" }
+);
+equatorLayerGroup.addLayer(equator);
+
 // Initialize the map
 var map;
 
@@ -57,7 +67,7 @@ var initMap = function () {
   map = L.map("map", {
     center: [0, 0],
     zoom: 2,
-    layers: [OSMtiles, guessesLayerGroup],
+    layers: [OSMtiles, guessesLayerGroup, equatorLayerGroup],
   });
 
   // Add a layer control to the map
@@ -70,6 +80,7 @@ var initMap = function () {
   var overlayMaps = {
     Locations: locationmarkers,
     Guesses: guessesLayerGroup,
+    Equator: equatorLayerGroup,
   };
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);

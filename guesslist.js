@@ -4,15 +4,16 @@ var addGuessToList = function (guess) {
   guess.id = generateGUID();
   var guessList = document.getElementById("guessList");
   var newGuess = document.createElement("li");
-  var hit = "hit";
+  var hit = "<span class='hitText'>hit</span>";
   if (guess.hit === false) {
-    hit = "miss";
+    hit = "<span class='missText'>miss</span>";
   }
   newGuess.innerHTML = `<button onclick="deleteGuessFromList('${
     guess.id
-  }')">X</button> ${hit} | ${guess.radius / 1000} | ${guess.name}`;
+  }')">X</button> ${hit} | ${guess.radius / 1000}km | ${guess.name}`;
   guessList.appendChild(newGuess);
   guessData.push(guess);
+  applyGuessListColors();
 };
 
 var deleteGuessFromList = function (id) {

@@ -20,8 +20,8 @@ var countries = [
     Capital: "Washington",
     Continent: "NA",
     Population: 327167434,
-    Locations5k: 15809,
-    Locations: 56589,
+    Locations5k: 15817,
+    Locations: 56600,
   },
   {
     Country: "Indonesia",
@@ -76,8 +76,8 @@ var countries = [
     Capital: "Tokyo",
     Continent: "AS",
     Population: 126529100,
-    Locations5k: 2586,
-    Locations: 2992,
+    Locations5k: 2603,
+    Locations: 3012,
   },
   {
     Country: "Mexico",
@@ -116,8 +116,8 @@ var countries = [
     Capital: "Hanoi",
     Continent: "AS",
     Population: 95540395,
-    Locations5k: 631,
-    Locations: 638,
+    Locations5k: 635,
+    Locations: 642,
   },
   {
     Country: "Democratic Republic of the Congo",
@@ -133,7 +133,7 @@ var countries = [
     Continent: "EU",
     Population: 82927922,
     Locations5k: 6457,
-    Locations: 24443,
+    Locations: 24444,
   },
   {
     Country: "Turkey",
@@ -141,15 +141,15 @@ var countries = [
     Continent: "AS",
     Population: 82319724,
     Locations5k: 1708,
-    Locations: 5424,
+    Locations: 5807,
   },
   {
     Country: "Iran",
     Capital: "Tehran",
     Continent: "AS",
     Population: 81800269,
-    Locations5k: 701,
-    Locations: 749,
+    Locations5k: 702,
+    Locations: 750,
   },
   {
     Country: "Thailand",
@@ -276,8 +276,8 @@ var countries = [
     Capital: "Khartoum",
     Continent: "AF",
     Population: 41801533,
-    Locations5k: 90,
-    Locations: 94,
+    Locations5k: 91,
+    Locations: 95,
   },
   {
     Country: "Iraq",
@@ -309,7 +309,7 @@ var countries = [
     Continent: "NA",
     Population: 37058856,
     Locations5k: 722,
-    Locations: 1646,
+    Locations: 1647,
   },
   {
     Country: "Morocco",
@@ -348,8 +348,8 @@ var countries = [
     Capital: "Kuala Lumpur",
     Continent: "AS",
     Population: 31528585,
-    Locations5k: 381,
-    Locations: 480,
+    Locations5k: 382,
+    Locations: 481,
   },
   {
     Country: "Angola",
@@ -365,7 +365,7 @@ var countries = [
     Continent: "AF",
     Population: 29767108,
     Locations5k: 227,
-    Locations: 228,
+    Locations: 229,
   },
   {
     Country: "Mozambique",
@@ -532,8 +532,8 @@ var countries = [
     Capital: "Amsterdam",
     Continent: "EU",
     Population: 17231017,
-    Locations5k: 941,
-    Locations: 3448,
+    Locations5k: 942,
+    Locations: 3449,
   },
   {
     Country: "Ecuador",
@@ -556,8 +556,8 @@ var countries = [
     Capital: "Phnom Penh",
     Continent: "AS",
     Population: 16249798,
-    Locations5k: 1330,
-    Locations: 1769,
+    Locations5k: 1332,
+    Locations: 1771,
   },
   {
     Country: "Senegal",
@@ -604,8 +604,8 @@ var countries = [
     Capital: "Kigali",
     Continent: "AF",
     Population: 12301939,
-    Locations5k: 43,
-    Locations: 45,
+    Locations5k: 59,
+    Locations: 61,
   },
   {
     Country: "Tunisia",
@@ -645,7 +645,7 @@ var countries = [
     Continent: "NA",
     Population: 11338138,
     Locations5k: 188,
-    Locations: 217,
+    Locations: 218,
   },
   {
     Country: "Burundi",
@@ -669,7 +669,7 @@ var countries = [
     Continent: "EU",
     Population: 10727668,
     Locations5k: 593,
-    Locations: 7227,
+    Locations: 7228,
   },
   {
     Country: "Dominican Republic",
@@ -692,8 +692,8 @@ var countries = [
     Capital: "Lisbon",
     Continent: "EU",
     Population: 10281762,
-    Locations5k: 1537,
-    Locations: 6907,
+    Locations5k: 1536,
+    Locations: 6906,
   },
   {
     Country: "Sweden",
@@ -717,7 +717,7 @@ var countries = [
     Continent: "AS",
     Population: 9942334,
     Locations5k: 198,
-    Locations: 277,
+    Locations: 278,
   },
   {
     Country: "Hungary",
@@ -789,7 +789,7 @@ var countries = [
     Continent: "EU",
     Population: 8516543,
     Locations5k: 953,
-    Locations: 9221,
+    Locations: 9222,
   },
   {
     Country: "South Sudan",
@@ -932,8 +932,8 @@ var countries = [
     Capital: "Helsinki",
     Continent: "EU",
     Population: 5518050,
-    Locations5k: 416,
-    Locations: 838,
+    Locations5k: 418,
+    Locations: 840,
   },
   {
     Country: "Slovakia",
@@ -1068,8 +1068,8 @@ var countries = [
     Capital: "Montevideo",
     Continent: "SA",
     Population: 3449299,
-    Locations5k: 78,
-    Locations: 181,
+    Locations5k: 79,
+    Locations: 182,
   },
   {
     Country: "Bosnia and Herzegovina",
@@ -1253,7 +1253,7 @@ var countries = [
     Continent: "OC",
     Population: 1267972,
     Locations5k: 66,
-    Locations: 78,
+    Locations: 80,
   },
   {
     Country: "Mauritius",
@@ -1553,7 +1553,7 @@ var countries = [
   },
   {
     Country: "Grenada",
-    Capital: "St. George's",
+    Capital: "Saint George's",
     Continent: "NA",
     Population: 111454,
     Locations5k: 9,
@@ -1601,7 +1601,7 @@ var countries = [
   },
   {
     Country: "Antigua and Barbuda",
-    Capital: "St. John's",
+    Capital: "Saint John’s",
     Continent: "NA",
     Population: 96286,
     Locations5k: 7,
@@ -1801,7 +1801,7 @@ var countries = [
   },
   {
     Country: "Palau",
-    Capital: "Melekeok",
+    Capital: "Melekeok Village",
     Continent: "OC",
     Population: 17907,
     Locations5k: 8,

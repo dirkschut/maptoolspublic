@@ -20,6 +20,9 @@ SELECT
         WHEN Countries.Capital = 'Palikir' THEN 'Kolonia'
         WHEN Countries.Capital = 'Nuku''alofa' THEN 'Nuku‘alofa'
         WHEN Countries.Capital = 'Torshavn' THEN 'Tórshavn'
+        WHEN Countries.Capital = 'St. George''s' THEN 'Saint George''s'
+        WHEN Countries.Capital = 'Melekeok' THEN 'Melekeok Village'
+        WHEN Countries.Capital = 'St. John''s' THEN 'Saint John’s'
         ELSE Countries.Capital
     END AS Capital,
     Countries.Continent,
@@ -54,7 +57,7 @@ FROM
     ) LocationsTotal ON Countries.ISO = LocationsTotal.country_code
 WHERE
     1 = 1
-    AND Countries.Country NOT IN ('Serbia and Montenegro', 'Netherlands Antilles')
+    AND Countries.Country NOT IN('Serbia and Montenegro', 'Netherlands Antilles')
     AND Countries.Population > 0
 ORDER BY
     Countries.Population DESC

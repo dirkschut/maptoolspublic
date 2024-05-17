@@ -31,20 +31,36 @@ function clickRecapCities() {
     if (line.includes("Answer is not")) {
       const text = `${line.split("Answer is not")[1].trim()}, ${country}`;
       if (!checkedLocations.includes(text)) {
-        addCircle(text, 100000, false, true);
+        addCircle(text, 100000, false, true, true);
         checkedLocations.push(text);
       } else {
         logError(new Error(`Location ${text} is already recapped`));
       }
     } else if (line.includes("Answer is under 100km away from")) {
       const text = `${line.split("Answer is under 100km away from")[1].trim()}`;
-      addCircle(text, 100000, true, true);
-      addCircle(text, 50000, false, true);
+      addCircle(text, 100000, true, true, true);
+      addCircle(text, 50000, false, true, true);
       checkedLocations.push(text);
     } else if (line.includes("Answer is under 50km away from")) {
       const text = `${line.split("Answer is under 50km away from")[1].trim()}`;
-      addCircle(text, 50000, true, true);
-      addCircle(text, 20000, false, true);
+      addCircle(text, 50000, true, true, true);
+      addCircle(text, 20000, false, true, true);
+      checkedLocations.push(text);
+    } else if (line.includes("Answer is under 20km away from")) {
+      const text = `${line.split("Answer is under 20km away from")[1].trim()}`;
+      addCircle(text, 20000, true, true, true);
+      if (document.getElementById("enable20RedCircles").checked)
+        addCircle(text, 10000, false, true, true);
+      checkedLocations.push(text);
+    } else if (line.includes("Answer is under 10km away from")) {
+      const text = `${line.split("Answer is under 10km away from")[1].trim()}`;
+      addCircle(text, 10000, true, true, true);
+      if (document.getElementById("enable10RedCircles").checked)
+        addCircle(text, 5000, false, true, true);
+      checkedLocations.push(text);
+    } else if (line.includes("Answer is under 5km away from")) {
+      const text = `${line.split("Answer is under 5km away from")[1].trim()}`;
+      addCircle(text, 5000, true, true, true);
       checkedLocations.push(text);
     }
   });
@@ -61,7 +77,7 @@ function clickRecapCountry() {
       if (!capital) {
         logError(new Error(`Country data for ${country} is not available`));
       }
-      addCircle(`${capital}, ${country}`, 100000, false, true);
+      addCircle(`${capital}, ${country}`, 100000, false, true, true);
     }
   });
 }
@@ -233,7 +249,7 @@ const createCircle = function (location, radius, color) {
 // color: string, color of the circle
 // pin: boolean, whether to add a pin to the map
 // Returns: nothing
-const addCircle = async function (name, radius, hit, pin) {
+const addCircle = async function (name, radius, hit, pin, isRecap = false) {
   try {
     // Fetch location data
     const location = await findLocation(name.trim());
@@ -259,7 +275,7 @@ const addCircle = async function (name, radius, hit, pin) {
     addGuessToList(guessdata);
 
     // If the centerCamera checkbox is checked, center the map on the location
-    if (document.getElementById("centerCamera").checked) {
+    if (document.getElementById("centerCamera").checked && !isRecap) {
       map.setView([location.latitude, location.longitude], 8);
     }
   } catch (error) {

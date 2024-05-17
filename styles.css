@@ -117,3 +117,8 @@ h1 {
 #SettingsContainer {
   text-align: left;
 }
+
+#randomCityFilters {
+  border: 1px solid grey;
+  border-radius: 5px;
+}
