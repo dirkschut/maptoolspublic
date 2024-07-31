@@ -43,15 +43,28 @@ var clickRandomCity = function () {
   var randomLocation =
     locationsInRegion[Math.floor(Math.random() * locationsInRegion.length)];
 
-  var randomCityDiv = document.getElementById("randomCity");
-  randomCityDiv.innerHTML = `
-    Random city: ${randomLocation.name} <button onclick="navigator.clipboard.writeText('${randomLocation.name}')">Copy to Clipboard</button><br />
-    Region: ${randomLocation.region}<br />
-    Country: ${randomLocation.country}<br />
-    Population: ${randomLocation.population}<br />
-    <button onclick="openGoogleMaps(${randomLocation.latitude}, ${randomLocation.longitude})">Open in Google Maps</button>
-    
-  `;
+  // Update the HTML with the random city details
+  document.getElementById("randomCityName").innerText = randomLocation.name;
+  document.getElementById("randomCityLatitude").innerText =
+    randomLocation.latitude;
+  document.getElementById("randomCityLongitude").innerText =
+    randomLocation.longitude;
+  document.getElementById("randomCityRegion").innerText = randomLocation.region;
+  document.getElementById("randomCityCountry").innerText =
+    randomCountry.Country;
+  document.getElementById("randomCityPopulation").innerText =
+    randomLocation.population;
+};
+
+var copyRandomCityToClipboard = function () {
+  var randomCity = document.getElementById("randomCityName").innerText;
+  navigator.clipboard.writeText(randomCity);
+};
+
+var openRandomCityInGoogleMaps = function () {
+  var lat = document.getElementById("randomCityLatitude").innerText;
+  var lon = document.getElementById("randomCityLongitude").innerText;
+  openGoogleMaps(lat, lon);
 };
 
 var openGoogleMaps = function (latitude, longitude) {

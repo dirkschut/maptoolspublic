@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Map Tools</title>
     <link
       rel="stylesheet"
@@ -24,8 +26,9 @@
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@^1.0.0/dist/leaflet-src.js"></script>
     <script src="https://unpkg.com/pouchdb@^5.2.0/dist/pouchdb.js"></script>
-    <script src="https://unpkg.com/leaflet.tilelayer.pouchdbcached@latest/L.TileLayer.PouchDBCached.js"></script>
+    <script src="libraries/L.TileLayer.PouchDBCached.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="Bing.js"></script>
     <script src="data/locations.js"></script>
     <script src="data/countries.js"></script>
@@ -38,7 +41,7 @@
     <script src="settings.js"></script>
     <script src="guessButtons.js"></script>
   </head>
-  <body>
+  <body class="bg-white dark:bg-slate-900">
     <div id="container">
       <div id="map"></div>
       <div id="menu">
@@ -76,48 +79,130 @@
           </button>
         </div>
 
-        <div id="Guess" class="tabcontent">
-          <h1>Guess</h1>
+        <div id="Guess" class="tabcontent flex p-1">
+          <h1 class="text-3xl font-bold">Guess</h1>
           <input
             type="text"
             id="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Enter city, region, country"
           />
-          <div id="Buttons">
-            <button onclick="clickGuessButtonMiss()">❌</button>
-            <button onclick="clickGuessButton100()">🤏</button>
-            <button onclick="clickGuessButton50()">🤞</button>
-            <button onclick="clickGuessButton20()">💥</button>
-            <button onclick="clickGuessButton10()">🔍</button>
-            <button onclick="clickGuessButton5()">📍</button>
+          <div
+            id="Buttons"
+            class="inline-flex rounded-md shadow-sm w-full mb-2"
+            role="group"
+          >
+            <button
+              onclick="clickGuessButtonMiss()"
+              class="w-1/6 px-4 py-2 text-lg font-medium text-gray-900 bg-white border border-gray-200 rounded-bl-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              ❌
+            </button>
+            <button
+              onclick="clickGuessButton100()"
+              class="w-1/6 px-4 py-2 text-lg font-medium text-gray-900 bg-white border-r border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              🤏
+            </button>
+            <button
+              onclick="clickGuessButton50()"
+              class="w-1/6 px-4 py-2 text-lg font-medium text-gray-900 bg-white border-r border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              🤞
+            </button>
+            <button
+              onclick="clickGuessButton20()"
+              class="w-1/6 py-2 text-lg font-medium text-gray-900 bg-white border-r border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              💥
+            </button>
+            <button
+              onclick="clickGuessButton10()"
+              class="w-1/6 py-2 text-lg font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              🔍
+            </button>
+            <button
+              onclick="clickGuessButton5()"
+              class="w-1/6 py-2 text-lg font-medium text-gray-900 bg-white border border-gray-200 rounded-br-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              📍
+            </button>
           </div>
-          <label>
-            <input type="checkbox" id="centerCamera" checked />
-            Center camera on circle
+          <br />
+          <label class="inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="centerCamera"
+              checked
+              value=""
+              class="sr-only peer"
+            />
+            <div
+              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Center camera on circle</span
+            > </label
+          ><br />
+          <label class="inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="enable20RedCircles"
+              value=""
+              class="sr-only peer"
+            />
+            <div
+              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Enable red circles with 💥</span
+            > </label
+          ><br />
+          <label class="inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              id="enable10RedCircles"
+              value=""
+              class="sr-only peer"
+            />
+            <div
+              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+            ></div>
+            <span
+              class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Enable red circles with 🔍</span
+            >
           </label>
-          <label>
-            <input type="checkbox" id="enable20RedCircles" />
-            Enable red circles with 💥
-          </label>
-          <label>
-            <input type="checkbox" id="enable10RedCircles" />
-            Enable red circles with 🔍
-          </label>
-          <hr />
-          <h1>Recap</h1>
+          <hr
+            class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"
+          />
+          <h1 class="text-3xl font-bold">Recap</h1>
           <textarea
             id="recapinput"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-t-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             rows="10"
-            cols="50"
             placeholder="Enter /recap content here..."
           ></textarea>
-          <div>
-            <button onclick="clickRecapCountry()">Recap Countries</button>
-            <button onclick="clickRecapCities()">Recap Cities</button>
+          <div class="inline-flex rounded-md shadow-sm w-full" role="group">
+            <button
+              onclick="clickRecapCountry()"
+              class="w-1/2 px-4 py-2 text-lg font-medium text-gray-900 bg-white border border-gray-200 rounded-bl-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              Recap Countries
+            </button>
+            <button
+              onclick="clickRecapCities()"
+              class="w-1/2 py-2 text-lg font-medium text-gray-900 bg-white border border-gray-200 rounded-br-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              Recap Cities
+            </button>
           </div>
         </div>
 
-        <div id="Guess List" class="tabcontent">
+        <div id="Guess List" class="tabcontent flex p-1">
           <div class="tooltip">
             <i class="fas fa-info-circle"></i>
             <span class="tooltiptext"
@@ -127,12 +212,12 @@
               guesses by disabling the Guesses layer.</span
             >
           </div>
-          <h1>Guess List</h1>
-          <button onclick="deleteAllGuesses()">Delete All</button>
+          <h1 class="text-3xl font-bold">Guess List</h1>
+          <button class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onclick="deleteAllGuesses()">Delete All</button>
           <ul id="guessList"></ul>
         </div>
 
-        <div id="Info" class="tabcontent">
+        <div id="Info" class="tabcontent flex p-1">
           Maptools is a tool made by
           <a href="https://dirkschut.nl">Dirk Schut</a> and is made freely
           available to anyone. You can check out the github repo at
@@ -141,6 +226,13 @@
           >.
           <hr />
           <h2>Changelog:</h2>
+          <div class="changelog">
+            <h3>Release 6 - 31 Juli 2024</h3>
+            <ul>
+              <li>Updated location data.</li>
+              <li>Made UI somewhat more modern. Darkmode needs some more work though.</li>
+            </ul>
+          </div>
           <div class="changelog">
             <h3>Release 5 - 17 May 2024</h3>
             <ul>
@@ -216,8 +308,8 @@
           </div>
         </div>
 
-        <div id="Countries" class="tabcontent">
-          <h3>Countries</h3>
+        <div id="Countries" class="tabcontent flex p-1">
+          <h1 class="text-3xl font-bold">Countries</h3>
           <!--<div id="countriesHempispheres">
             <input type="checkbox" id="north" checked />
             <label for="north">Northern Hemisphere</label>
@@ -242,10 +334,10 @@
           <table id="countriesList"></table>
         </div>
 
-        <div id="Random City" class="tabcontent">
-          <h1>Random City</h1>
-          <div id="randomCityFilters">
-            <h2>Filters</h2>
+        <div id="Random City" class="tabcontent flex p-1">
+          <h1 class="text-3xl font-bold">Random City</h1>
+          <div id="randomCityFilters" class="w-full mb-2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Filters</h2>
             <div id="continents">
               <b>Continent:</b>
               <input type="checkbox" id="randomAF" checked />
@@ -261,12 +353,22 @@
               <input type="checkbox" id="randomSA" checked />
               <label for="randomSA">SA</label>
             </div>
+            <button onclick="clickRandomCity()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Generate Random City</button>
           </div>
-          <button onclick="clickRandomCity()">Generate Random City</button>
-          <div id="randomCity"></div>
+          <div id="randomCity" class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <h1 id="randomCityName" class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Random City</h1>
+            <div id="randomCityCoordinates">Coordinates: <span id="randomCityLatitude">0.00</span>, <span id="randomCityLongitude">0.00</span></div>
+            <div id="randomCityRegionWrapper">Region: <span id="randomCityRegion">Region</span></div>
+            <div id="randomCityCountryWrapper">Country: <span id="randomCityCountry">Country</span></div>
+            <div id="randomCityPopulationWrapper">Population: <span id="randomCityPopulation">Population</span></div>
+            <div role="group" class="inline-flex rounded-md shadow-sm w-full mb-2">
+              <button type="button" onclick="copyRandomCityToClipboard()" class="w-1/2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">Copy to clipboard</button>
+              <button type="button" onclick="openRandomCityInGoogleMaps()" class="w-1/2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">Open in Google Maps</button>
+            </div>
+          </div>
         </div>
 
-        <div id="Settings" class="tabcontent">
+        <div id="Settings" class="tabcontent flex p-1">
           <h1>Settings</h1>
           <div id="SettingsContainer">
             <div>
@@ -287,8 +389,10 @@
           </div>
         </div>
 
-        <hr />
-        <h2>Error Messages</h2>
+        <hr
+          class="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"
+        />
+        <h1 class="text-3xl font-bold">Error Messages</h2>
         <p>Ignore if empty</p>
         <div id="error-message" style="color: red"></div>
       </div>

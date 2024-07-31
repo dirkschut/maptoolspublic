@@ -8,7 +8,7 @@ var addGuessToList = function (guess) {
   if (guess.hit === false) {
     hit = "<span class='missText'>miss</span>";
   }
-  newGuess.innerHTML = `<button onclick="deleteGuessFromList('${
+  newGuess.innerHTML = `<button  class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-1 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onclick="deleteGuessFromList('${
     guess.id
   }')">X</button> ${hit} | ${guess.radius / 1000}km | ${guess.name}`;
   guessList.appendChild(newGuess);

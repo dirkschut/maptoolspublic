@@ -34,7 +34,7 @@ var bingTiles = new L.BingLayer(bingKey, {
 
 var locationmarkers = L.markerClusterGroup();
 locationsJSON.forEach((location) => {
-  if (location.population >= 5000) {
+  if (location.population >= 1000) {
     var marker = L.marker(L.latLng(location.latitude, location.longitude), {
       title: location.name,
     });
