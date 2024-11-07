@@ -32,21 +32,31 @@ var bingTiles = new L.BingLayer(bingKey, {
   cacheMaxAge: 108000000,
 });
 
-var locationmarkers = L.markerClusterGroup();
-locationsJSON.forEach((location) => {
-  if (location.population >= 1000) {
-    var marker = L.marker(L.latLng(location.latitude, location.longitude), {
-      title: location.name,
-    });
-    marker.bindPopup(`Name: ${location.name}<br />Region: ${location.region}`);
-    marker
-      .getPopup()
-      .setContent(
-        `<button onClick='navigator.clipboard.writeText("${location.name}");'>Copy name</button><br />Name: ${location.name}<br />Region: ${location.region}<br />`
+var addLocationMarkers = function () {
+  locationsJSON.forEach((location) => {
+    if (location.population >= settingMinimumPopulation) {
+      var marker = L.marker(L.latLng(location.latitude, location.longitude), {
+        title: location.name,
+      });
+      marker.bindPopup(
+        `Name: ${location.name}<br />Region: ${location.region}`
       );
-    locationmarkers.addLayer(marker);
-  }
-});
+      marker
+        .getPopup()
+        .setContent(
+          `<button onClick='navigator.clipboard.writeText("${location.name}");'>Copy name</button><br />Name: ${location.name}<br />Region: ${location.region}<br />`
+        );
+      locationmarkers.addLayer(marker);
+    }
+  });
+};
+
+var clearLocationMarkers = function () {
+  locationmarkers.clearLayers();
+};
+
+var locationmarkers = L.markerClusterGroup();
+addLocationMarkers();
 
 var guessesLayerGroup = L.layerGroup();
 

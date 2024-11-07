@@ -91,3 +91,10 @@ var filterCountriesByContinent = function (countries, checkedContinents) {
     return checkedContinents.includes(country.Continent);
   });
 };
+
+var showRandomCityOnMap = function () {
+  var lat = document.getElementById("randomCityLatitude").innerText;
+  var lon = document.getElementById("randomCityLongitude").innerText;
+  var cityName = document.getElementById("randomCityName").innerText;
+  L.marker([lat, lon]).addTo(map).bindPopup(cityName).openPopup();
+};

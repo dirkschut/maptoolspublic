@@ -307,3 +307,4 @@ function generateGUID() {
 }
 
 initMap();
+generateChangelog();
