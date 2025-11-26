@@ -2,6 +2,13 @@ const clickGuessButtonMiss = function () {
   clickCircleButton([{ radius: 100, hit: false, pin: true }]);
 };
 
+const clickGuessButton250 = function () {
+  clickCircleButton([
+    { radius: 250, hit: true, pin: true },
+    { radius: 100, hit: false, pin: false },
+  ]);
+};
+
 const clickGuessButton100 = function () {
   clickCircleButton([
     { radius: 100, hit: true, pin: true },

@@ -1,5 +1,22 @@
 var changeLog = [
   {
+    version: "Release 9",
+    date: "2025-11-26",
+    changes: [
+      "Added a button to guess with a 250 km radius circle.",
+      "Added 250km circles when using the recap functionality.",
+      "Updated location data.",
+    ],
+  },
+  {
+    version: "Release 8",
+    date: "2025-01-01",
+    changes: [
+      "Added a hemisphere filter for the countries list.",
+      "Updated location data.",
+    ],
+  },
+  {
     version: "Release 7",
     date: "2024-11-07",
     changes: [

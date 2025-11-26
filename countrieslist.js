@@ -10,11 +10,22 @@ var updateCountriesList = function () {
     if (hasCountryBeenGuessed(country.Country)) {
       return;
     }
+
+    //Check Continent Filter
     var checkbox = document.getElementById(`continent${country.Continent}`);
     if (checkbox && !checkbox.checked) {
       return;
     }
     var countryElement = document.createElement("tr");
+
+    //Check Hemisphere Filter
+    var checkedNorth = document.getElementById("hemisphereNorth").checked;
+    var checkedSouth = document.getElementById("hemisphereSouth").checked;
+    if (checkedNorth && !checkedSouth && !country.InNorthernHemisphere) {
+      return;
+    } else if (checkedSouth && !checkedNorth && !country.InSouthernHemisphere) {
+      return;
+    }
 
     var countryCell = document.createElement("td");
     countryCell.innerHTML = country.Country;

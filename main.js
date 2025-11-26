@@ -36,6 +36,11 @@ function clickRecapCities() {
       } else {
         logError(new Error(`Location ${text} is already recapped`));
       }
+    } else if (line.includes("Answer is under 250km away from")) {
+      const text = `${line.split("Answer is under 250km away from")[1].trim()}`;
+      addCircle(text, 250000, true, true, true);
+      addCircle(text, 100000, false, true, true);
+      checkedLocations.push(text);
     } else if (line.includes("Answer is under 100km away from")) {
       const text = `${line.split("Answer is under 100km away from")[1].trim()}`;
       addCircle(text, 100000, true, true, true);

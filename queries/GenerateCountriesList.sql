@@ -28,7 +28,35 @@ SELECT
     Countries.Continent,
     Countries.Population,
     Locations5k.Locations5k,
-    LocationsTotal.Locations
+    LocationsTotal.Locations,
+    CAST(
+        CASE
+            WHEN EXISTS (
+                SELECT
+                    1
+                FROM
+                    locations
+                WHERE
+                    locations.country_code = Countries.ISO
+                    AND locations.latitude > 0
+            ) THEN true
+            ELSE false
+        END AS SIGNED
+    ) AS InNorthernHemisphere,
+    CAST(
+        CASE
+            WHEN EXISTS (
+                SELECT
+                    1
+                FROM
+                    locations
+                WHERE
+                    locations.country_code = Countries.ISO
+                    AND locations.latitude < 0
+            ) THEN true
+            ELSE false
+        END AS SIGNED
+    ) AS InSouthernHemisphere
 FROM
     Countries
     LEFT JOIN (
